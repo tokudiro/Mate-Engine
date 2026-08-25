@@ -13,6 +13,7 @@ public class SettingsHandlerToggles : MonoBehaviour
     public Toggle dayNightToggle;
     public Toggle enableWindowSittingToggle;
     public Toggle enableDiscordRPCToggle;
+    public Toggle enableVoicevoxTTSToggle;
     public Toggle enableHandHoldingToggle;
     public Toggle ambientOcclusionToggle;
     public Toggle enableIKToggle;
@@ -48,6 +49,7 @@ public class SettingsHandlerToggles : MonoBehaviour
         dayNightToggle?.onValueChanged.AddListener(OnDayNightChanged);
         enableWindowSittingToggle?.onValueChanged.AddListener(OnEnableWindowSittingChanged);
         enableDiscordRPCToggle?.onValueChanged.AddListener(OnEnableDiscordRPCChanged);
+        enableVoicevoxTTSToggle?.onValueChanged.AddListener(OnEnableVoicevoxTTSChanged);
         enableHandHoldingToggle?.onValueChanged.AddListener(OnEnableHandHoldingChanged);
         ambientOcclusionToggle?.onValueChanged.AddListener(OnAmbientOcclusionChanged);
         enableIKToggle?.onValueChanged.AddListener(OnEnableIKChanged);
@@ -73,6 +75,7 @@ public class SettingsHandlerToggles : MonoBehaviour
     private void OnDayNightChanged(bool v) { SaveLoadHandler.Instance.data.dayNight = v; ApplySettings(); Save(); }
     private void OnEnableWindowSittingChanged(bool v) { SaveLoadHandler.Instance.data.enableWindowSitting = v; ApplySettings(); if (!v) { var handlers = FindObjectsByType<AvatarWindowHandler>(FindObjectsInactive.Include, FindObjectsSortMode.None); foreach (var handler in handlers) handler.ForceExitWindowSitting(); } Save(); }
     private void OnEnableDiscordRPCChanged(bool v) { SaveLoadHandler.Instance.data.enableDiscordRPC = v; ApplySettings(); Save(); }
+    private void OnEnableVoicevoxTTSChanged(bool v) { SaveLoadHandler.Instance.data.enableVoicevoxTTS = v; ApplySettings(); Save(); }
     private void OnEnableHandHoldingChanged(bool v) { SaveLoadHandler.Instance.data.enableHandHolding = v; ApplySettings(); Save(); }
     private void OnAmbientOcclusionChanged(bool v) { SaveLoadHandler.Instance.data.ambientOcclusion = v; ApplySettings(); Save(); }
     private void OnEnableIKChanged(bool v) { SaveLoadHandler.Instance.data.enableIK = v; ApplySettings(); Save(); }
@@ -118,6 +121,7 @@ public class SettingsHandlerToggles : MonoBehaviour
         dayNightToggle?.SetIsOnWithoutNotify(data.dayNight);
         enableWindowSittingToggle?.SetIsOnWithoutNotify(data.enableWindowSitting);
         enableDiscordRPCToggle?.SetIsOnWithoutNotify(data.enableDiscordRPC);
+        enableVoicevoxTTSToggle?.SetIsOnWithoutNotify(data.enableVoicevoxTTS);
         enableHandHoldingToggle?.SetIsOnWithoutNotify(data.enableHandHolding);
         ambientOcclusionToggle?.SetIsOnWithoutNotify(data.ambientOcclusion);
         enableIKToggle?.SetIsOnWithoutNotify(data.enableIK);
@@ -202,6 +206,7 @@ public class SettingsHandlerToggles : MonoBehaviour
         dayNightToggle?.SetIsOnWithoutNotify(true);
         enableWindowSittingToggle?.SetIsOnWithoutNotify(false);
         enableDiscordRPCToggle?.SetIsOnWithoutNotify(true);
+        enableVoicevoxTTSToggle?.SetIsOnWithoutNotify(false);
         enableHandHoldingToggle?.SetIsOnWithoutNotify(true);
         ambientOcclusionToggle?.SetIsOnWithoutNotify(false);
         enableIKToggle?.SetIsOnWithoutNotify(true);
@@ -225,6 +230,7 @@ public class SettingsHandlerToggles : MonoBehaviour
         data.dayNight = true;
         data.enableWindowSitting = false;
         data.enableDiscordRPC = true;
+        data.enableVoicevoxTTS = false;
         data.enableHandHolding = true;
         data.ambientOcclusion = false;
         data.enableIK = true;

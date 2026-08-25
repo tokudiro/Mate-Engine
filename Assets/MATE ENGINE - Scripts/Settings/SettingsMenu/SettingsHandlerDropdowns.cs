@@ -19,6 +19,25 @@ public class SettingsHandlerDropdowns : MonoBehaviour
     public TMP_Dropdown particleDropdown;
     public List<ParticleThemeEntry> particleThemes = new List<ParticleThemeEntry>();
 
+    [System.Serializable]
+    public class VoicevoxSpeakerEntry
+    {
+        public int id;
+        public string display;
+    }
+
+    [Header("Voicevox Speaker")]
+    public TMP_Dropdown voicevoxSpeakerDropdown;
+    public List<VoicevoxSpeakerEntry> voicevoxSpeakers = new List<VoicevoxSpeakerEntry>
+    {
+        new VoicevoxSpeakerEntry { id = 2, display = "四国めたん (ノーマル)" },
+        new VoicevoxSpeakerEntry { id = 3, display = "ずんだもん (ノーマル)" },
+        new VoicevoxSpeakerEntry { id = 8, display = "春日部つむぎ (ノーマル)" },
+        new VoicevoxSpeakerEntry { id = 9, display = "波音リツ (ノーマル)" },
+        new VoicevoxSpeakerEntry { id = 10, display = "雨晴はう (ノーマル)" },
+        new VoicevoxSpeakerEntry { id = 14, display = "冥鳴ひまり (ノーマル)" },
+    };
+
     public LLMUnity.LLM llm;
 
     private readonly int[] contextOptions = { 2048, 4096, 8192, 16384, 32768 };
@@ -45,6 +64,12 @@ public class SettingsHandlerDropdowns : MonoBehaviour
         {
             BuildParticleDropdown();
             particleDropdown.onValueChanged.AddListener(OnParticleChanged);
+        }
+
+        if (voicevoxSpeakerDropdown != null)
+        {
+            BuildVoicevoxSpeakerDropdown();
+            voicevoxSpeakerDropdown.onValueChanged.AddListener(OnVoicevoxSpeakerChanged);
         }
 
         LoadSettings();
@@ -82,6 +107,29 @@ public class SettingsHandlerDropdowns : MonoBehaviour
         SaveLoadHandler.Instance.SaveToDisk();
     }
 
+    void BuildVoicevoxSpeakerDropdown()
+    {
+        if (voicevoxSpeakerDropdown == null) return;
+        if (voicevoxSpeakers == null || voicevoxSpeakers.Count == 0) return;
+
+        var options = new List<string>();
+        foreach (var s in voicevoxSpeakers) options.Add(s.display);
+
+        voicevoxSpeakerDropdown.ClearOptions();
+        voicevoxSpeakerDropdown.AddOptions(options);
+
+        int sel = SaveLoadHandler.Instance.data.voicevoxSpeakerId;
+        int idx = Mathf.Max(0, voicevoxSpeakers.FindIndex(e => e.id == sel));
+        voicevoxSpeakerDropdown.SetValueWithoutNotify(idx);
+    }
+
+    void OnVoicevoxSpeakerChanged(int index)
+    {
+        if (voicevoxSpeakers == null || index < 0 || index >= voicevoxSpeakers.Count) return;
+        SaveLoadHandler.Instance.data.voicevoxSpeakerId = voicevoxSpeakers[index].id;
+        SaveLoadHandler.Instance.SaveToDisk();
+    }
+
     void OnGraphicsChanged(int index)
     {
         SaveLoadHandler.Instance.data.graphicsQualityLevel = index;
@@ -110,6 +158,7 @@ public class SettingsHandlerDropdowns : MonoBehaviour
         if (llm != null) llm.contextSize = contextOptions[index];
 
         if (particleDropdown != null) BuildParticleDropdown();
+        if (voicevoxSpeakerDropdown != null) BuildVoicevoxSpeakerDropdown();
     }
 
     public void ApplySettings()
@@ -149,6 +198,9 @@ public class SettingsHandlerDropdowns : MonoBehaviour
 
         SaveLoadHandler.Instance.data.selectedParticleTheme = "Standard";
         if (particleDropdown != null) BuildParticleDropdown();
+
+        SaveLoadHandler.Instance.data.voicevoxSpeakerId = 3;
+        if (voicevoxSpeakerDropdown != null) BuildVoicevoxSpeakerDropdown();
 
         SaveLoadHandler.ApplyAllSettingsToAllAvatars();
         SaveLoadHandler.Instance.SaveToDisk();

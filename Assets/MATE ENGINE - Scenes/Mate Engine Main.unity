@@ -33240,7 +33240,7 @@ Light:
   serializedVersion: 11
   m_Type: 2
   m_Color: {r: 1, g: 0.26999998, b: 0.96203995, a: 1}
-  m_Intensity: 2.7887703e-29
+  m_Intensity: 2.696586e-29
   m_Range: 0.5
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -75623,7 +75623,7 @@ Light:
   serializedVersion: 11
   m_Type: 2
   m_Color: {r: 0, g: 0.44799995, b: 1, a: 1}
-  m_Intensity: 5.5775407e-29
+  m_Intensity: 5.393172e-29
   m_Range: 1
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -99576,7 +99576,7 @@ Light:
   serializedVersion: 11
   m_Type: 2
   m_Color: {r: 0, g: 0.44799995, b: 1, a: 1}
-  m_Intensity: 4.1831553e-29
+  m_Intensity: 4.044879e-29
   m_Range: 1
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -159592,6 +159592,7 @@ MonoBehaviour:
   llmCharacter: {fileID: 7063969291654908835}
   inputPlaceholder: Talk to me!
   streamAudioSource: {fileID: 1197370323}
+  ttsAudioSource: {fileID: 0}
   playerMaterial: {fileID: 2100000, guid: cee35382f7f30a849836e533c6880e91, type: 2}
   aiMaterial: {fileID: 2100000, guid: 9f49335d2d3e0f94d9293b69ca0d5429, type: 2}
   playerTextMaterial: {fileID: 2100000, guid: 0fea5a746d740294fbcd1f45772cc2ff, type: 2}
@@ -253284,6 +253285,8 @@ MonoBehaviour:
     uiHueShift: 0
     uiSaturation: 0.5
     enableDiscordRPC: 1
+    enableVoicevoxTTS: 0
+    voicevoxSpeakerId: 3
     tutorialDone: 0
     selectedLocaleCode: en
     enableIK: 1
@@ -253303,6 +253306,7 @@ MonoBehaviour:
     selectedParticleTheme: Standard
     enableFeedSystem: 0
     enableRandomAvatar: 0
+    enableLocomotion: 0
     alarms: []
     timers: []
 --- !u!1 &6901646575481116606
@@ -255919,7 +255923,7 @@ MonoBehaviour:
     groupID: ambi_lights
     exclusiveTags:
     - lights
-    fadeCurrentValue: 1.3943852e-29
+    fadeCurrentValue: 1.348293e-29
     fadeTarget: 0
     isFading: 1
     hasYSet: 0
@@ -255943,7 +255947,7 @@ MonoBehaviour:
     groupID: ambi_lights
     exclusiveTags:
     - lights
-    fadeCurrentValue: 1.3943852e-29
+    fadeCurrentValue: 1.348293e-29
     fadeTarget: 0
     isFading: 1
     hasYSet: 0
@@ -255967,7 +255971,7 @@ MonoBehaviour:
     groupID: ambi_lights
     exclusiveTags:
     - lights
-    fadeCurrentValue: 1.3943852e-29
+    fadeCurrentValue: 1.348293e-29
     fadeTarget: 0
     isFading: 1
     hasYSet: 0
@@ -261499,8 +261503,8 @@ MonoBehaviour:
   dontDestroyOnLoad: 1
   contextSize: 16384
   batchSize: 512
-  model: llama-3.2-3b-instruct-q4_k_m.gguf
-  chatTemplate: llama3 chat
+  model: Qwen3-8B-Q4_K_M.gguf
+  chatTemplate: qwen3
   lora: 
   loraWeights: 
   flashAttention: 1
@@ -261510,9 +261514,9 @@ MonoBehaviour:
   SSLKey: 
   SSLKeyPath: 
   minContextLength: 0
-  maxContextLength: 131072
+  maxContextLength: 40960
   embeddingsOnly: 0
-  embeddingLength: 3072
+  embeddingLength: 4096
 --- !u!114 &8018179413771216032
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -271265,6 +271269,20 @@ MonoBehaviour:
     display: STANDARD
   - id: Galaxy
     display: GALAXY
+  voicevoxSpeakerDropdown: {fileID: 0}
+  voicevoxSpeakers:
+  - id: 2
+    display: "\u56DB\u56FD\u3081\u305F\u3093 (\u30CE\u30FC\u30DE\u30EB)"
+  - id: 3
+    display: "\u305A\u3093\u3060\u3082\u3093 (\u30CE\u30FC\u30DE\u30EB)"
+  - id: 8
+    display: "\u6625\u65E5\u90E8\u3064\u3080\u304E (\u30CE\u30FC\u30DE\u30EB)"
+  - id: 9
+    display: "\u6CE2\u97F3\u30EA\u30C4 (\u30CE\u30FC\u30DE\u30EB)"
+  - id: 10
+    display: "\u96E8\u6674\u306F\u3046 (\u30CE\u30FC\u30DE\u30EB)"
+  - id: 14
+    display: "\u51A5\u9CF4\u3072\u307E\u308A (\u30CE\u30FC\u30DE\u30EB)"
   llm: {fileID: 8017896322329334834}
 --- !u!114 &8536052333486738853
 MonoBehaviour:
@@ -271286,6 +271304,7 @@ MonoBehaviour:
   dayNightToggle: {fileID: 8565889578739046597}
   enableWindowSittingToggle: {fileID: 3183897954241458892}
   enableDiscordRPCToggle: {fileID: 5840647013858511223}
+  enableVoicevoxTTSToggle: {fileID: 0}
   enableHandHoldingToggle: {fileID: 3352794677304716357}
   ambientOcclusionToggle: {fileID: 6787112380993848685}
   enableIKToggle: {fileID: 2837519544703362540}
@@ -271296,6 +271315,7 @@ MonoBehaviour:
   enableMinecraftMessagesToggle: {fileID: 1967671819}
   enableFeedSystemToggle: {fileID: 234303502}
   enableRandomAvatarToggle: {fileID: 269300858}
+  enableLocomotionToggle: {fileID: 0}
   bloomObject: {fileID: 147272346}
   dayNightObject: {fileID: 1221425058}
   ambientOcclusionObject: {fileID: 1794725911}

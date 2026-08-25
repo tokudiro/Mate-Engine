@@ -143,6 +143,9 @@ public class SaveLoadHandler : MonoBehaviour
 
         public bool enableDiscordRPC = true;
 
+        public bool enableVoicevoxTTS = false;
+        public int voicevoxSpeakerId = 3;
+
         public bool tutorialDone = false;
 
         public string selectedLocaleCode = "en";

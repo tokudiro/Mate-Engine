@@ -40,6 +40,9 @@ namespace LLMUnitySamples
         [Header("Streaming Audio")]
         public AudioSource streamAudioSource;
 
+        [Header("Voicevox TTS")]
+        public AudioSource ttsAudioSource;
+
         [Header("Bubble Materials")]
         public Material playerMaterial;         
         public Material aiMaterial;             
@@ -80,6 +83,14 @@ namespace LLMUnitySamples
         void Start()
         {
             avatarAnimator = GetComponent<Animator>();
+
+            if (ttsAudioSource == null)
+            {
+                ttsAudioSource = gameObject.AddComponent<AudioSource>();
+                ttsAudioSource.loop = false;
+                ttsAudioSource.playOnAwake = false;
+                ttsAudioSource.pitch = 1f;
+            }
 
             if (font == null) font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
             if (cornerRadius <= 16) sprite = roundedSprite16;
@@ -272,13 +283,21 @@ namespace LLMUnitySamples
                 (partial) => { aiBubble.SetText(partial); layoutDirty = true; },
                 () =>
                 {
-                    if (avatarAnimator != null) avatarAnimator.SetBool(isTalkingHash, false);
-
                     aiBubble.SetText(aiBubble.GetText());
                     layoutDirty = true;
 
                     if (streamAudioSource != null && streamAudioSource.isPlaying)
                         StartCoroutine(FadeOutStreamAudio());
+
+                    bool ttsEnabled = SaveLoadHandler.Instance != null && SaveLoadHandler.Instance.data.enableVoicevoxTTS;
+                    if (ttsEnabled)
+                    {
+                        _ = PlayVoicevoxSpeechAsync(aiBubble.GetText());
+                    }
+                    else
+                    {
+                        if (avatarAnimator != null) avatarAnimator.SetBool(isTalkingHash, false);
+                    }
 
                     AllowInput();
                 }
@@ -298,6 +317,21 @@ namespace LLMUnitySamples
 
             streamAudioSource.Stop();
             streamAudioSource.volume = startVolume; 
+        }
+
+        private async Task PlayVoicevoxSpeechAsync(string text)
+        {
+            int speakerId = SaveLoadHandler.Instance != null ? SaveLoadHandler.Instance.data.voicevoxSpeakerId : 3;
+            AudioClip clip = await VoicevoxClient.SynthesizeAsync(text, speakerId);
+
+            if (clip != null && ttsAudioSource != null)
+            {
+                ttsAudioSource.clip = clip;
+                ttsAudioSource.Play();
+                await Task.Delay(Mathf.CeilToInt(clip.length * 1000));
+            }
+
+            if (avatarAnimator != null) avatarAnimator.SetBool(isTalkingHash, false);
         }
 
         public void WarmUpCallback()
